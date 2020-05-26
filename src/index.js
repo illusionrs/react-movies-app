@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import './index.css';
+import 'typeface-roboto';
+
 // import registerServiceWorker from './serviceWorker';
 import Home from './screens/Home/Home';
 
