@@ -9,7 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const customStyles = {
   content: {
@@ -19,21 +20,23 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
+    usernameRequired: "dispNone",
+    username: "",
   },
 };
 
 const TabContainer = function (props) {
   return (
-    <Typography component="div" style={{ padding: 0,textAlign:'center'}}>
+    <Typography component="div" style={{ padding: 0, textAlign: "center" }}>
       {props.children}
     </Typography>
   );
 };
 
-TabContainer.propTypes={
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
-     children:PropTypes.node.isRequired
-}
 
 class Header extends React.Component {
   constructor() {
@@ -53,6 +56,13 @@ class Header extends React.Component {
   tabChangeHandler = (event, value) => {
     this.setState({ value });
   };
+  loginClickHandler = () => {
+    this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
+  };
+  
+  inputUsernameChangeHandler = (e) => {
+    this.setState({ username: e.target.value });
+  }
   render() {
     return (
       <div className="header">
@@ -71,26 +81,36 @@ class Header extends React.Component {
           onRequestClose={this.closeModalHandler}
           style={customStyles}
         >
-          <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
+          <Tabs
+            className="tabs"
+            value={this.state.value}
+            onChange={this.tabChangeHandler}
+          >
             <Tab label="Login" />
             <Tab label="Register" />
           </Tabs>
-           { this.state.value===0 &&
-          <TabContainer>
-            <FormControl required>
-              <InputLabel htmlFor="userName">UserName</InputLabel>
-              <Input id="userName" type="text" />
-            </FormControl>
-            <br/>
-            <br/>
-            <FormControl>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input id="password" type="password" />
-            </FormControl>
-            <br/>
-            <br/>
-            <Button variant="contained" color="primary">LOGIN</Button>
-          </TabContainer>}
+          {this.state.value === 0 && (
+            <TabContainer>
+              <FormControl required>
+                <InputLabel htmlFor="userName">UserName</InputLabel>
+                <Input id="userName" type="text"  username={this.state.username} onChange={this.inputUsernameChangeHandler}/>
+                <FormHelperText className={this.state.usernameRequired}>
+                  <span className="red">required</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
+              <br />
+              <FormControl>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input id="password" type="password" />
+              </FormControl>
+              <br />
+              <br />
+              <Button variant="contained" color="primary"  onClick={this.loginClickHandler}>
+                LOGIN
+              </Button>
+            </TabContainer>
+          )}
         </Modal>
       </div>
     );
