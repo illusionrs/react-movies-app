@@ -267,6 +267,7 @@ class Header extends React.Component {
             </TabContainer>
           )}
         </Modal>
+       
       </div>
     );
   }
